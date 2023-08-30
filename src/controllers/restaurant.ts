@@ -1,5 +1,3 @@
-export const getById = (id: string) => {
-    return {
+export const getById = (id: string) => ({
 
-    }
-}
+});
