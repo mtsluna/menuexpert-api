@@ -1,11 +1,13 @@
 import { Router } from 'express';
+import {Restaurant} from "../entities/restaurant";
 
 const restaurantRouter = Router();
 
-restaurantRouter.get('/:id', (req, res) => {
+restaurantRouter.get('/:id', async (req, res) => {
   const { id } = req.params;
 
-  console.log(id);
+  const restaurant = new Restaurant();
+  restaurant.name = "Mc Donalds";
 
   res.send({
     test: 'ok3',
