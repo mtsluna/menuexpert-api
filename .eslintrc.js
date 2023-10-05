@@ -9,7 +9,8 @@ module.exports = {
         'airbnb-typescript/base'
     ],
     rules: {
-        "no-console": 'off'
+        "no-console": 'off',
+        "import/prefer-default-export": "off"
     },
     parserOptions: {
         project: './tsconfig.json'

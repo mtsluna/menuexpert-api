@@ -1,16 +1,16 @@
-import "reflect-metadata";
-import {DataSource} from "typeorm";
-import Restaurant from "../../routes/restaurant";
+// eslint-disable-next-line import/no-extraneous-dependencies
+import 'reflect-metadata';
+import { DataSource } from 'typeorm';
 
-console.log( `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}?retryWrites=true&w=majority`)
+console.log(`Connecting to ${process.env.MONGO_PROTOCOL}://**********:**********@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}`);
 
 export const AppDataSource = new DataSource({
-    type: "mongodb",
-    url: `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}`,
-    synchronize: true,
-    logging: true,
-    useNewUrlParser: true,
-    entities: [Restaurant],
-    subscribers: [],
-    migrations: [],
-})
+  type: 'mongodb',
+  url: `${process.env.MONGO_PROTOCOL}://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_HOST}/${process.env.MONGO_DATABASE}`,
+  synchronize: true,
+  logging: true,
+  useNewUrlParser: true,
+  entities: ['src/entities/*.ts'],
+  subscribers: [],
+  migrations: [],
+});

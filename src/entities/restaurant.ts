@@ -1,14 +1,14 @@
-import {ObjectIdColumn, ObjectId, Column, Entity, BaseEntity} from "typeorm";
+import {
+  BaseEntity, Column, Entity, ObjectId, ObjectIdColumn,
+} from 'typeorm';
 
 @Entity({
-    database: 'menu-expert'
+  database: 'menu-expert',
 })
 export class Restaurant extends BaseEntity {
+  @ObjectIdColumn()
+    id: ObjectId;
 
-    @ObjectIdColumn()
-    id: ObjectId
-
-    @Column()
+  @Column()
     name: string;
-
 }
