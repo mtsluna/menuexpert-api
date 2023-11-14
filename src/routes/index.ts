@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import restaurantRouter from './restaurant';
+import { Preference, MercadoPagoConfig } from 'mercadopago';
 
 const router = Router();
 
@@ -330,5 +331,64 @@ router.get('/menu/97e9b9ad-391d-4507-a357-3db9d7c9f130/product/71633a09-90d7-4c9
     SectionID: 1,
   });
 });
+
+router.post('/checkout', async (req, res) => {
+
+  const mercadoPagoConfig = new MercadoPagoConfig({
+    accessToken: 'TEST-834337810214244-102914-fd8cfcca603630a54aace4f29b11e6f6-180004645'
+  })
+
+  const preference = new Preference(mercadoPagoConfig);
+
+  console.log(req.body)
+
+  const {
+    tip,
+    items
+  } = req.body;
+
+  const tipItem = {
+    unit_price: tip.price.amount,
+    quantity: 1,
+    title: 'Propina',
+    id: 'tip_id'
+  }
+
+  const itemsMp = items.map((item) => {
+    const extras = item.selections.map((value) => {
+      return (value.selected.filter((value) => value !== false))
+          .map((value) => value.price)
+          .reduce((acc, next) => acc + next.amount, 0)
+    }).reduce((acc, next) => acc + next, 0);
+
+    return {
+      unit_price: ((item.product?.price.amount || 0) + extras),
+      quantity: item.quantity,
+      title: item.name,
+      id: item.id
+    }
+  });
+
+  const preferenceResponse = await preference.create({
+    body: {
+      items: [
+          ...itemsMp,
+        tipItem
+      ],
+      auto_return: 'approved',
+      back_urls: {
+        success: 'www.google.com',
+        failure: 'www.facebook.com',
+        pending: 'www.x.com'
+      }
+    }
+  })
+
+  return res.send({
+    id: preferenceResponse.id,
+    initPoint: preferenceResponse.init_point
+  })
+
+})
 
 export default router;
